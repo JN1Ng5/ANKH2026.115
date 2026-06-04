@@ -697,10 +697,10 @@
 
     // 關卡資料：注意這裡的圖片路徑都移除了空格和括號，請記得改檔名
     const levelData = {
-      1: { badge:'第一關 · 槍擊阿佩普', title:'迷惑且充滿岩漿的危險之地', desc:'在此找尋所有相關的線索，並擊中帶有阿佩普象徵之物。', img:'images/level1.png' },
-      2: { badge:'第二關 · 守護卡諾卜罈之四子', title:'老舊殘破的雕像，彷彿久久未有人踏入這裡', desc:'查找與四子相關之線索，並將四座神像與代表臟器安回正確位置。', img:'images/level2.png' },
-      3: { badge:'第三關 · 十災校正', title:'散落在四周的石塊，象徵著混亂與災變', desc:'混亂之中尋覓真正的秩序，將十災正確順序重組回希伯來真言石環。', img:'images/level3.png' },
-      4: { badge:'第四關 · 九柱象徵、血緣光陣', title:'矗立周圍的石柱，莊嚴神聖，不可侵犯', desc:'找尋神祇真容，完成九柱神象徵歸位，瞭解創世神之血緣，導引血緣光線。', img:'images/level4.png' }
+      1: { badge:'第一關 · 槍擊阿佩普', title:'迷惑且充滿岩漿的危險之地', desc:'在此找尋所有相關的線索，並擊中帶有阿佩普象徵之物。', img:'images/Level1.png' },
+      2: { badge:'第二關 · 守護卡諾卜罈之四子', title:'老舊殘破的雕像，彷彿久久未有人踏入這裡', desc:'查找與四子相關之線索，並將四座神像與代表臟器安回正確位置。', img:'images/Level2.png' },
+      3: { badge:'第三關 · 十災校正', title:'散落在四周的石塊，象徵著混亂與災變', desc:'混亂之中尋覓真正的秩序，將十災正確順序重組回希伯來真言石環。', img:'images/Level3.png' },
+      4: { badge:'第四關 · 九柱象徵、血緣光陣', title:'矗立周圍的石柱，莊嚴神聖，不可侵犯', desc:'找尋神祇真容，完成九柱神象徵歸位，瞭解創世神之血緣，導引血緣光線。', img:'images/Level4.png' }
     };
 
     const content = document.getElementById('level-content');
@@ -710,7 +710,7 @@
       // 容錯處理：如果沒圖就顯示一個佔位框
       const media = d.img ? `
         <div class="level-media">
-          <img src="${d.img}" alt="${d.badge} 圖片" onerror="this.parentElement.style.display='none'"/>
+          <img src="${d.img}" alt="${d.badge} 圖片" loading="lazy" decoding="async"/>
           ${d.caption ? `<div class='caption'>${d.caption}</div>` : ''}
         </div>` : '';
         
