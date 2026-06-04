@@ -354,6 +354,66 @@
       display: block;
     }
 
+    /* 團隊成員 */
+    .team-section{
+      background: radial-gradient(ellipse at 50% 0%, rgba(138,28,28,.08), transparent 60%),
+                  radial-gradient(ellipse at 20% 80%, rgba(212,181,113,.05), transparent 50%);
+    }
+    .team-intro{
+      color:#aaa;
+      max-width:560px;
+      margin:0 0 36px;
+      font-size:1.05rem;
+    }
+    .team-grid{
+      display:grid;
+      grid-template-columns:repeat(5, 1fr);
+      gap:16px;
+    }
+    .team-card{
+      text-align:center;
+      padding:24px 12px 20px;
+      min-width:0;
+      background:linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(0,0,0,0.25) 100%);
+      border:1px solid var(--glass-border);
+      border-radius:12px;
+      transition:.3s;
+    }
+    .team-card:hover{
+      transform:translateY(-5px);
+      border-color:var(--accent);
+      box-shadow:0 10px 30px rgba(0,0,0,0.5);
+    }
+    .team-avatar{
+      width:64px; height:64px;
+      margin:0 auto 14px;
+      border-radius:50%;
+      display:grid; place-items:center;
+      font-family:'Cinzel', serif;
+      font-size:1.75rem;
+      font-weight:700;
+      color:var(--accent);
+      background:radial-gradient(circle at 30% 25%, rgba(229,199,122,0.25), rgba(0,0,0,0.5));
+      border:2px solid rgba(212,181,113,.35);
+      box-shadow:0 0 20px rgba(229,199,122,0.12);
+    }
+    .team-name{
+      margin:0 0 10px;
+      font-family:'Cinzel', serif;
+      font-size:clamp(0.95rem, 1.8vw, 1.2rem);
+      color:var(--accent);
+      letter-spacing:.08em;
+    }
+    .team-role{
+      display:inline-block;
+      margin:0;
+      padding:6px 14px;
+      border-radius:50px;
+      font-size:0.85rem;
+      color:#ccc;
+      background:rgba(212,181,113,.08);
+      border:1px solid var(--glass-border);
+    }
     /* 下載區 */
     .cta-row{ display:flex; gap:16px; flex-wrap:wrap; margin-bottom: 40px; }
     
@@ -434,6 +494,18 @@
 
       .contact-grid{ grid-template-columns:1fr; }
       h2{ font-size:clamp(1.25rem, 5vw, 1.75rem); }
+
+      .team-grid{
+        grid-template-columns:repeat(5, minmax(120px, 1fr));
+        gap:10px;
+        overflow-x:auto;
+        padding-bottom:8px;
+        -webkit-overflow-scrolling:touch;
+        scrollbar-width:thin;
+      }
+      .team-card{ padding:20px 8px 16px; }
+      .team-avatar{ width:52px; height:52px; font-size:1.35rem; }
+      .team-role{ font-size:0.75rem; padding:5px 10px; }
     }
 
     @media (max-width: 480px) {
@@ -458,6 +530,7 @@
         <a href="#lore">世界觀</a>
         <a href="#levels">關卡</a>
         <a href="#merch">周邊</a>
+        <a href="#team">團隊</a>
         <a href="#download" class="cta">下載 / 聯繫</a>
       </div>
     </div>
@@ -620,6 +693,40 @@
       <button type="button" class="merch-nav" id="merch-next" aria-label="下一項商品">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.59 16.59 13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
       </button>
+    </div>
+  </section>
+
+  <section id="team" class="team-section">
+    <div class="container">
+      <h2 class="reveal">製作團隊</h2>
+      <p class="team-intro reveal">穿越試煉的每一步，皆由以下成員共同鑄造。向探索金字塔密語的眾人致意。</p>
+      <div class="team-grid">
+        <article class="team-card reveal">
+          <div class="team-avatar" aria-hidden="true">田</div>
+          <h3 class="team-name">田宗玄</h3>
+          <p class="team-role">3D 美術</p>
+        </article>
+        <article class="team-card reveal" style="transition-delay:.06s">
+          <div class="team-avatar" aria-hidden="true">盧</div>
+          <h3 class="team-name">盧和靖</h3>
+          <p class="team-role">Unity 程式</p>
+        </article>
+        <article class="team-card reveal" style="transition-delay:.12s">
+          <div class="team-avatar" aria-hidden="true">張</div>
+          <h3 class="team-name">張翊祥</h3>
+          <p class="team-role">3D 美術</p>
+        </article>
+        <article class="team-card reveal" style="transition-delay:.18s">
+          <div class="team-avatar" aria-hidden="true">王</div>
+          <h3 class="team-name">王昱智</h3>
+          <p class="team-role">旁白 · 報告者</p>
+        </article>
+        <article class="team-card reveal" style="transition-delay:.24s">
+          <div class="team-avatar" aria-hidden="true">李</div>
+          <h3 class="team-name">李駿江</h3>
+          <p class="team-role">雜項協助</p>
+        </article>
+      </div>
     </div>
   </section>
 
