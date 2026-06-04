@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ANKH：金字塔的密語 | 官方網站</title>
+  <meta name="description" content="《ANKH：金字塔的密語》— 無戰鬥的埃及遺跡解謎冒險。探索神祇試煉、破解古老機關、揭開金字塔的祕密。" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      /* 配色調整得更有質感 */
+      --bg: #0b0a08;
+      --sand: #c2a66b;
+      --gold: #d4b571;
+      --blood: #8a1c1c; 
+      --ink: #111111;
+      --papyrus: #f2e7c9;
+      --accent: #e5c77a;
+      --glass-border: rgba(212,181,113,.25);
+    }
+
+    /* === 基礎全域美化 === */
+    html,body{ height:100%; scroll-behavior: smooth; }
+    body{
+      margin:0; color:#ddd; background:var(--bg);
+      font-family: 'Noto Sans TC', sans-serif;
+      line-height:1.7; overflow-x:hidden;
+    }
+    h1,h2,h3,h4{
+      font-family:'Cinzel', serif; 
+      letter-spacing:.05em; 
+      margin-top: 0;
+      color: var(--accent);
+    }
+    a { transition: 0.3s; }
+
+    /* 背景特效 */
+    body::before{
+      content:""; position:fixed; inset:0; pointer-events:none; z-index:-2;
+      background:
+        radial-gradient(circle at 80% 10%, rgba(228,203,131,.08), transparent 50%),
+        radial-gradient(circle at 10% 40%, rgba(138,28,28,.1), transparent 50%),
+        linear-gradient(to bottom, #0b0a08 0%, #161410 100%);
+    }
+
+    /* === 元件美化 === */
+
+    /* 邊框裝飾 */
+    .frame { position:relative; }
+    .frame::before, .frame::after{
+      content:""; position:absolute; inset:0; pointer-events:none;
+      background:
+        linear-gradient(90deg, transparent, var(--accent), transparent) top/100% 1px no-repeat,
+        linear-gradient(90deg, transparent, var(--accent), transparent) bottom/100% 1px no-repeat;
+      opacity: 0.5;
+    }
+
+    /* 導覽列 */
+    .nav{
+      position:sticky; top:0; z-index:100;
+      backdrop-filter: blur(12px);
+      background: rgba(11,10,8,0.85);
+      border-bottom: 1px solid rgba(212,181,113,.1);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+    .container{ width:min(1100px, 92vw); margin:0 auto; }
+    .nav-row{ display:flex; align-items:center; justify-content:space-between; padding:12px 0; }
+    
+    .brand{ display:flex; gap:12px; align-items:center; text-decoration:none; color:var(--accent); }
+    .brand:hover { opacity: 0.8; }
+    .brand .logo{ width:32px; height:32px; filter: drop-shadow(0 0 5px rgba(229,199,122,0.5)); }
+    .brand span{ font-family:'Cinzel', serif; font-weight:800; font-size: 1.1rem; }
+    
+    .menu a{ color:#bbb; text-decoration:none; margin-left:20px; padding:6px 12px; border-radius:4px; font-size: 0.95rem; }
+    .menu a:hover{ color:var(--accent); background:rgba(229,199,122,0.08); }
+    .cta{ border:1px solid rgba(212,181,113,.4); color:var(--accent) !important; }
+    .cta:hover{ background:var(--accent) !important; color:#000 !important; border-color:var(--accent); }
+
+    /* 英雄區 (Header) */
+    .hero{ position:relative; padding:100px 0 100px; text-align:center; overflow:hidden; }
+    
+    /* === 大標題 Logo 區塊 === */
+    .hero-logo-box {
+        margin: 0 auto 30px auto;
+        width: 100%;
+        max-width: 800px;
+        display: flex;
+        justify-content: center;
+    }
+    .hero-logo-box img {
+        width: 100%;
+        height: auto;
+        display: block;
+        filter: drop-shadow(0 0 20px rgba(229,199,122,0.3)); 
+    }
+
+    .hero h1{ 
+      font-size:clamp(24px, 5vw, 40px);
+      margin:0 0 16px; 
+      text-shadow: 0 0 25px rgba(229,199,122,0.25);
+      font-weight: 400;
+      opacity: 0.9;
+    }
+    .hero p{ color:#ccc; max-width:700px; margin:0 auto 32px; font-size: 1.1rem; }
+    .hero strong { color: #fff; border-bottom: 1px solid var(--blood); }
+    
+    .buttons{ display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
+    .btn{ 
+      display:inline-flex; align-items:center; gap:8px; 
+      padding:12px 24px; border-radius:4px; 
+      text-decoration:none; color:#111; background:var(--accent); 
+      font-weight:700; transition:.2s;
+      border:1px solid var(--accent);
+      box-shadow: 0 4px 15px rgba(229,199,122,0.2);
+      cursor: pointer;
+    }
+    .btn:hover{ transform:translateY(-2px); box-shadow: 0 8px 25px rgba(229,199,122,0.4); background: #f0dca0; }
+    .btn.secondary{ 
+      background:transparent; color:var(--accent); 
+      border:1px solid rgba(212,181,113,.5); 
+      box-shadow: none;
+    }
+    .btn.secondary:hover{ background:rgba(229,199,122,0.05); border-color:var(--accent); }
+
+    .ankh{ position:absolute; inset:auto 50% -100px auto; transform:translateX(-50%); opacity:.08; pointer-events: none; }
+
+    /* 區塊通用 */
+    section{ padding:80px 0; }
+    .grid{ display:grid; grid-template-columns:repeat(12, 1fr); gap:24px; }
+    
+    /* 卡片美化 */
+    .card{ 
+      grid-column:span 4; 
+      background: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(0,0,0,0.2) 100%);
+      border:1px solid var(--glass-border); 
+      border-radius:12px; padding:24px; 
+      transition: .3s;
+    }
+    .card:hover { transform: translateY(-5px); border-color: var(--accent); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+    .card h3{ margin:0 0 12px; color:var(--accent); font-size: 1.3rem; }
+    .card p{ margin:0; color:#bbb; }
+    @media (max-width:900px){ .card{ grid-column:span 6; } }
+    @media (max-width:640px){ .card{ grid-column:span 12; } }
+
+    /* === 周邊商品專用樣式 === */
+    .merch-img-box {
+      width: 100%;
+      height: 250px;
+      background: rgba(0,0,0,0.2);
+      border-radius: 8px;
+      margin-bottom: 15px;
+      overflow: hidden;
+      display: flex; 
+      align-items: center; 
+      justify-content: center;
+      border: 1px solid rgba(255,255,255,0.05);
+      position: relative;
+    }
+    .merch-img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain; /* 確保完整顯示不裁切 */
+      padding: 10px;
+      box-sizing: border-box; /* 確保 padding 不會撐大容器 */
+      transition: transform 0.5s;
+    }
+    .card:hover .merch-img-box img {
+      transform: scale(1.05);
+    }
+    .merch-price {
+      color: var(--blood);
+      font-size: 1.2rem;
+      font-weight: bold;
+      font-family: 'Cinzel', serif;
+      margin: 10px 0 15px 0 !important;
+    }
+    .merch-card {
+        display: flex;
+        flex-direction: column;
+    }
+    /* 讓按鈕自動置底 */
+    .merch-info {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+    }
+    .merch-info button {
+        margin-top: auto;
+    }
+
+    /* 周邊輪播 */
+    .merch-carousel {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 8px;
+    }
+    .merch-viewport {
+      flex: 1;
+      overflow: hidden;
+    }
+    .merch-track {
+      display: flex;
+      gap: 24px;
+      transition: transform 0.45s ease;
+      will-change: transform;
+    }
+    .merch-carousel .merch-card {
+      flex: 0 0 auto;
+      grid-column: auto;
+      margin: 0;
+      box-sizing: border-box;
+      min-width: 0;
+    }
+    .merch-nav {
+      flex-shrink: 0;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 1px solid rgba(212,181,113,.4);
+      background: rgba(0,0,0,0.45);
+      color: var(--accent);
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      transition: .2s;
+      padding: 0;
+    }
+    .merch-nav svg { width: 24px; height: 24px; fill: currentColor; }
+    .merch-nav:hover:not(:disabled) {
+      background: rgba(229,199,122,0.12);
+      border-color: var(--accent);
+      transform: scale(1.05);
+    }
+    .merch-nav:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+    @media (max-width: 640px) {
+      .merch-carousel { gap: 8px; }
+      .merch-nav { width: 40px; height: 40px; }
+      .merch-nav svg { width: 20px; height: 20px; }
+    }
+
+    /* 羊皮紙美化 */
+    .papyrus{ background: radial-gradient(circle at 50% 0%, rgba(138,28,28,.08), transparent 70%); }
+    .scroll{
+      background:var(--papyrus);
+      color:#3e3218; 
+      border:1px solid #c2a66b; 
+      border-radius:4px; padding:40px; position:relative;
+      box-shadow: 
+        inset 0 0 30px rgba(139,69,19,0.1), 
+        0 15px 40px rgba(0,0,0,.5);
+      border-top: 5px double #b89f63;
+      border-bottom: 5px double #b89f63;
+    }
+    .scroll h3{ color:#6b4d12; border-bottom: 1px solid rgba(107,77,18,0.2); padding-bottom: 10px; margin-bottom: 15px; }
+    .seal{ 
+      position:absolute; right:30px; bottom:-25px; width:80px; height:80px; 
+      background: radial-gradient(circle at 30% 30%, #d64545, #8a1c1c);
+      border-radius:50%; box-shadow:0 6px 20px rgba(0,0,0,.5);
+      display:grid; place-items:center; color:#ffe7b7; 
+      font-family:'Cinzel', serif; font-weight:900; letter-spacing:.1em;
+      transform: rotate(-15deg);
+      border: 2px dashed rgba(255,255,255,0.2);
+    }
+
+    /* 關卡展示 */
+    .level{ display:grid; grid-template-columns: 280px 1fr; gap:32px; align-items:start; }
+    .level .panel{ 
+      background: rgba(0,0,0,0.3);
+      border:1px solid var(--glass-border); 
+      border-radius:12px; padding:24px; 
+    }
+    
+    /* 按鈕列表樣式 */
+    .level-tabs { display:grid; gap:10px; }
+    .level-tab { width: 100%; justify-content: flex-start; text-align: left; opacity: 0.7; }
+    .level-tab:hover { opacity: 1; }
+    .level-tab.active { 
+      background: var(--accent); color: #000; border-color: var(--accent); opacity: 1;
+      box-shadow: 0 0 15px rgba(229,199,122,0.3);
+    }
+
+    .badge{ 
+      display:inline-flex; align-items:center; gap:8px; padding:4px 12px; 
+      border-radius:50px; font-size:12px; font-family: 'Cinzel';
+      background:rgba(212,181,113,.1); color:var(--accent); 
+      border:1px solid var(--glass-border); 
+    }
+    @media (max-width:880px){ .level{ grid-template-columns: 1fr; } }
+
+    /* 關卡圖片 */
+    .level-media{ margin-top:20px; border-radius:8px; overflow:hidden; border:1px solid var(--glass-border); }
+    .level-media img{ width:100%; height:auto; display:block; transition: transform 0.5s; }
+    .level-media:hover img { transform: scale(1.03); }
+    .caption{ font-size:13px; color:#888; margin-top:8px; text-align: center; font-style: italic; }
+
+    /* 預告片 */
+    .trailer-wrap {
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(212,181,113,.2);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    }
+    .trailer-ratio {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #000;
+    }
+    .trailer-ratio iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+    }
+
+    /* 下載區 */
+    .cta-row{ display:flex; gap:16px; flex-wrap:wrap; margin-bottom: 40px; }
+    
+    /* 表單 */
+    input, textarea {
+      background: rgba(0,0,0,0.4);
+      border: 1px solid #444;
+      color: #fff;
+      padding: 12px;
+      border-radius: 4px;
+      font-family: inherit;
+      transition: .3s;
+    }
+    input:focus, textarea:focus {
+      outline: none; border-color: var(--accent);
+      background: rgba(0,0,0,0.6);
+      box-shadow: 0 0 10px rgba(229,199,122,0.1);
+    }
+
+    /* 頁腳 */
+    footer{ padding:60px 0 40px; color:#888; text-align:center; border-top:1px solid var(--glass-border); background: #080806; }
+    .small{ font-size:13px; opacity:.7; }
+
+    /* 動畫 */
+    .reveal{ opacity:0; transform:translateY(20px); transition:.6s ease-out; }
+    .reveal.active{ opacity:1; transform:none; }
+    .icon{ width:20px; height:20px; fill:currentColor; }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container nav-row">
+      <a class="brand" href="#top" aria-label="ANKH 官方網站首頁">
+        <svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><path fill="currentColor" d="M31 13c0-5 5-9 11-9s11 4 11 9c0 6-5 11-11 11h-4v-4h4c3 0 7-3 7-7s-4-7-7-7-7 3-7 7c0 4 3 7 7 7v4c-8 0-14-6-14-14Zm3 20h-8v-8h8v-6h8v6h8v8h-8v20h-8V33Z"/></svg>
+        <span>ANKH：金字塔的密語</span>
+      </a>
+      <div class="menu">
+        <a href="#features">特色</a>
+        <a href="#lore">世界觀</a>
+        <a href="#levels">關卡</a>
+        <a href="#merch">周邊</a>
+        <a href="#download" class="cta">下載 / 聯繫</a>
+      </div>
+    </div>
+  </nav>
+
+  <header id="top" class="hero frame">
+    <div class="container">
+      
+      <div class="hero-logo-box reveal">
+          <img src="images/title_logo.png" alt="ANKH 金色標題"> 
+      </div>
+      
+      <h1 class="reveal" style="transition-delay:.06s">探索神祇的試煉，聆聽金字塔的低語</h1>
+      
+      <p class="reveal" style="transition-delay:.12s">《ANKH：金字塔的密語》是一款<strong>無戰鬥</strong>的埃及遺跡解謎冒險。你將扮演年輕考古學家，依循神像上的謎語與場景線索，穿越充滿機關與陷阱的試煉。</p>
+      <div class="buttons reveal" style="transition-delay:.18s">
+        <a class="btn" href="#download"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v10.17l3.59-3.58L17 11l-5 5-5-5 1.41-1.41L11 13.17V3h1zM5 19h14v2H5z"/></svg> 立刻下載試玩</a>
+        <a class="btn secondary" href="#trailer"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg> 觀看預告</a>
+      </div>
+    </div>
+    
+    <svg class="ankh" viewBox="0 0 200 300" width="340" height="520" aria-hidden="true">
+      <defs>
+        <radialGradient id="g" cx="50%" cy="50%" r="60%">
+          <stop offset="0%" stop-color="#fff" stop-opacity=".2" />
+          <stop offset="60%" stop-color="#e5c77a" stop-opacity=".1" />
+          <stop offset="100%" stop-color="#e5c77a" stop-opacity="0" />
+        </radialGradient>
+      </defs>
+      <g fill="url(#g)">
+        <ellipse cx="100" cy="70" rx="70" ry="50" />
+        <rect x="85" y="120" width="30" height="130" rx="6" />
+        <rect x="40" y="160" width="120" height="26" rx="8" />
+      </g>
+    </svg>
+  </header>
+
+  <section id="features" class="container">
+    <h2 class="reveal">遊戲特色</h2>
+    <div class="grid">
+      <div class="card reveal">
+        <h3>埃及神祇機關</h3>
+        <p>每一關需找尋與關卡相關的線索，解開關鍵謎題與視覺語彙，讓解謎與世界觀緊密對應。</p>
+      </div>
+      <div class="card reveal" style="transition-delay:.06s">
+        <h3>觀察 × 推理 × 記憶</h3>
+        <p>從雕像、壁畫線索到石柱上，所有物品都將可能含有資訊，玩家需要綜合判斷及推理，否則將無法離開。</p>
+      </div>
+      <div class="card reveal" style="transition-delay:.12s">
+        <h3>美術與介面</h3>
+        <p>羊皮紙資訊面板，營造古文明×神秘學的視覺體驗。</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="lore" class="papyrus">
+    <div class="container">
+      <div class="scroll reveal">
+        <h3>前言</h3>
+        <p>混沌之蛇阿佩普蟄伏於永夜，日光彷彿將被一口吞噬。你是太陽神「拉」選中的試煉者，須穿越幻象與崩毀的神殿，在喧囂與謎語之間辨認真相：誰是混沌的真身？誰守護著早已錯位的秩序？誰又能將散落的真言重新拼回世界？
+          此地不留捷徑，只留線索。你將以目光鎖定被遮蔽的象徵，以手中之物校正錯置的神祇與器物；當記憶與傳說被塵埃掩埋，掌中的光芒會替你接上古今——那不是替你破局的咒語，而是讓你在迷霧裡仍能說出名字與緣由的燈。若能走完這趟試煉，將得到神祇藏下的迷人財寶。</p>
+        <div class="seal">ANKH</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="levels" class="container">
+    <h2 class="reveal">試煉一覽</h2>
+
+    <div class="level" style="grid-template-columns: 280px 1fr;">
+      
+      <div class="panel reveal">
+        <div class="level-tabs" style="display:grid; gap:10px;">
+          <button class="btn secondary level-tab active" data-level="1">第一關 · 槍擊阿佩普</button>
+          <button class="btn secondary level-tab" data-level="2">第二關 · 守護卡諾卜罈之四子</button>
+          <button class="btn secondary level-tab" data-level="3">第三關 · 十災校正</button>
+          <button class="btn secondary level-tab" data-level="4">第四關 · 九柱象徵、血緣光陣</button>
+        </div>
+        <div class="small" style="margin-top:12px; opacity:.6; text-align:center;">
+          <svg class="icon" viewBox="0 0 24 24" style="vertical-align:middle; width:16px;"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+          點擊左側以切換資料
+        </div>
+      </div>
+
+      <div class="panel reveal" id="level-content" style="min-height:320px; display: flex; flex-direction: column; justify-content: center;">
+      </div>
+    </div>
+  </section>
+
+  <section id="trailer" class="container">
+    <h2 class="reveal">金字塔的密語 · 宣傳片</h2>
+    <div class="trailer-wrap frame reveal">
+      <div class="trailer-ratio">
+        <iframe
+          src="https://www.youtube-nocookie.com/embed/pRQDx-NoEHc?rel=0&modestbranding=1"
+          title="ANKH：金字塔的密語 — 宣傳片"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen
+          loading="lazy"
+          referrerpolicy="strict-origin-when-cross-origin"
+        ></iframe>
+      </div>
+    </div>
+  </section>
+
+  <section id="merch" class="container">
+    <h2 class="reveal">珍藏周邊</h2>
+    <div class="merch-carousel reveal">
+      <button type="button" class="merch-nav" id="merch-prev" aria-label="上一項商品">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+      </button>
+      <div class="merch-viewport" id="merch-viewport">
+        <div class="merch-track" id="merch-track">
+          <div class="card merch-card">
+            <div class="merch-img-box">
+              <img src="images/mousepad.png" alt="滑鼠墊">
+            </div>
+            <div class="merch-info">
+              <h3>ANKH:滑鼠墊</h3>
+              <p>遊戲海報同款滑鼠墊</p>
+              <p class="merch-price">NT$ 499</p>
+              <button class="btn" style="width:100%">加入購物車</button>
+            </div>
+          </div>
+          <div class="card merch-card">
+            <div class="merch-img-box">
+              <img src="images/keychain.png" alt="吊飾">
+            </div>
+            <div class="merch-info">
+              <h3>ANKH:安卡吊飾</h3>
+              <p>遊戲中物件所製成的吊飾</p>
+              <p class="merch-price">NT$ 60</p>
+              <button class="btn" style="width:100%">加入購物車</button>
+            </div>
+          </div>
+          <div class="card merch-card">
+            <div class="merch-img-box">
+              <img src="images/postcard.png" alt="明信片">
+            </div>
+            <div class="merch-info">
+              <h3>明信片</h3>
+              <p>明信片</p>
+              <p class="merch-price">NT$ 20</p>
+              <button class="btn" style="width:100%">加入購物車</button>
+            </div>
+          </div>
+          <div class="card merch-card">
+            <div class="merch-img-box">
+              <img src="images/sticker.png" alt="貼紙">
+            </div>
+            <div class="merch-info">
+              <h3>ANKH:貼紙</h3>
+              <p>遊戲主題貼紙組</p>
+              <p class="merch-price">NT$ 30</p>
+              <button class="btn" style="width:100%">加入購物車</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button type="button" class="merch-nav" id="merch-next" aria-label="下一項商品">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.59 16.59 13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+      </button>
+    </div>
+  </section>
+
+  <section id="download" class="container">
+    <h2 class="reveal">下載與聯繫</h2>
+    
+    <div class="cta-row reveal">
+      <a class="btn" href="https://drive.google.com/file/d/1D2zoLARXxQ5HqlgCvaLlqVXH91dcw9KJ/view?usp=sharing" target="_blank" rel="noopener">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> 
+        下載 Windows 版
+      </a>
+    </div>
+
+    <div class="grid" style="margin-top:26px">
+      <div class="card reveal" style="grid-column:span 12">
+        <h3>聯絡我們</h3>
+        <form id="contact" onsubmit="return sendMsg(event)">
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+            <label>姓名<br><input required name="name" placeholder="你的稱呼" style="width:100%; box-sizing:border-box"></label>
+            <label>Email<br><input required type="email" name="email" placeholder="you@example.com" style="width:100%; box-sizing:border-box"></label>
+          </div>
+          <label style="display:block; margin-top:12px">訊息<br><textarea required name="msg" rows="5" placeholder="想合作、媒體詢問、Bug 回報…" style="width:100%; box-sizing:border-box"></textarea></label>
+          <button class="btn secondary" style="margin-top:16px; width:100%;">送出訊息</button>
+          <div id="notice" class="small" style="margin-top:12px; color:#9fe29f; display:none">✅ 已送出（示範）。你可以改寫 sendMsg() 將資料送至表單服務。</div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div style="display:flex; justify-content:center; gap:10px; margin-bottom:8px; color:#ccc">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.8 12s-4.1 5.5-9.8 5.5S2.2 12 2.2 12 6.3 6.5 12 6.5 21.8 12 21.8 12Zm-9.8 3a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-7.2 3.2c1.2.1 2.1.1 3.4-.2 1.6-.4 2.3-.7 3.9-1.5 1.2-.6 2.5-.8 3.6-.8 1.5 0 2.6.4 4.3 1.1 1.2.5 2.2.8 3.1.9-.7.8-2 1.7-3.6 2.3-1.4.6-2.7.8-4.1.8-1.7 0-3.2-.3-4.8-1-1.8-.7-3.9-1.6-5.8-1.6z"/></svg>
+        <span>金龜子工作室版權所有</span>
+      </div>
+      <div class="small">© <span id="year"></span> ANKH Team. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script>
+    // 年份
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // 滾動揭示動畫
+    const reveal = () => {
+      const els = document.querySelectorAll('.reveal');
+      const h = window.innerHeight;
+      els.forEach(el=>{
+        const r = el.getBoundingClientRect();
+        if(r.top < h - 60) el.classList.add('active');
+      });
+    };
+    reveal();
+    addEventListener('scroll', reveal, {passive:true});
+
+    // 關卡資料：注意這裡的圖片路徑都移除了空格和括號，請記得改檔名
+    const levelData = {
+      1: { badge:'第一關 · 槍擊阿佩普', title:'迷惑且充滿岩漿的危險之地', desc:'在此找尋所有相關的線索，並擊中帶有阿佩普象徵之物。', img:'images/level1.png' },
+      2: { badge:'第二關 · 守護卡諾卜罈之四子', title:'老舊殘破的雕像，彷彿久久未有人踏入這裡', desc:'查找與四子相關之線索，並將四座神像與代表臟器安回正確位置。', img:'images/level2.png' },
+      3: { badge:'第三關 · 十災校正', title:'散落在四周的石塊，象徵著混亂與災變', desc:'混亂之中尋覓真正的秩序，將十災正確順序重組回希伯來真言石環。', img:'images/level3.png' },
+      4: { badge:'第四關 · 九柱象徵、血緣光陣', title:'矗立周圍的石柱，莊嚴神聖，不可侵犯', desc:'找尋神祇真容，完成九柱神象徵歸位，瞭解創世神之血緣，導引血緣光線。', img:'images/level4.png' }
+    };
+
+    const content = document.getElementById('level-content');
+    function renderLevel(id){
+      const d = levelData[id];
+      if(!d) return;
+      // 容錯處理：如果沒圖就顯示一個佔位框
+      const media = d.img ? `
+        <div class="level-media">
+          <img src="${d.img}" alt="${d.badge} 圖片" onerror="this.parentElement.style.display='none'"/>
+          ${d.caption ? `<div class='caption'>${d.caption}</div>` : ''}
+        </div>` : '';
+        
+      // 加上淡入動畫
+      content.style.opacity = 0;
+      setTimeout(()=>{
+        content.innerHTML = `
+          <span class="badge">${d.badge}</span>
+          <h3 style="margin-top:8px">${d.title}</h3>
+          <p>${d.desc}</p>
+          ${media}
+        `;
+        content.style.opacity = 1;
+      }, 150);
+      content.style.transition = 'opacity 0.3s ease';
+    }
+
+    document.querySelectorAll('.level-tab').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        document.querySelectorAll('.level-tab').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active'); 
+        renderLevel(btn.dataset.level);
+      })
+    });
+
+    // 預設渲染第一關
+    renderLevel(1);
+
+    // 周邊輪播
+    (function initMerchCarousel(){
+      const viewport = document.getElementById('merch-viewport');
+      const track = document.getElementById('merch-track');
+      const prev = document.getElementById('merch-prev');
+      const next = document.getElementById('merch-next');
+      if(!viewport || !track || !prev || !next) return;
+
+      const cards = [...track.querySelectorAll('.merch-card')];
+      const gap = 24;
+      let index = 0;
+
+      function perView(){
+        if(window.innerWidth <= 640) return 1;
+        if(window.innerWidth <= 900) return 2;
+        return 3;
+      }
+
+      function maxIndex(){
+        return Math.max(0, cards.length - perView());
+      }
+
+      function layout(){
+        const n = perView();
+        const max = maxIndex();
+        if(index > max) index = max;
+        const w = viewport.clientWidth;
+        const cardW = (w - gap * (n - 1)) / n;
+        const step = cardW + gap;
+        cards.forEach(c => {
+          c.style.width = cardW + 'px';
+          c.style.flexBasis = cardW + 'px';
+        });
+        let offset = index * step;
+        const maxOffset = Math.max(0, track.scrollWidth - w);
+        if(index >= max) offset = maxOffset;
+        else offset = Math.min(offset, maxOffset);
+        track.style.transform = `translateX(-${offset}px)`;
+      }
+
+      prev.addEventListener('click', () => {
+        const max = maxIndex();
+        index = index <= 0 ? max : index - 1;
+        layout();
+      });
+      next.addEventListener('click', () => {
+        const max = maxIndex();
+        index = index >= max ? 0 : index + 1;
+        layout();
+      });
+      window.addEventListener('resize', layout);
+      layout();
+    })();
+
+    // 聯絡表單
+    function sendMsg(e){
+      e.preventDefault();
+      const notice = document.getElementById('notice');
+      notice.style.display = 'block';
+      e.target.reset();
+      return false;
+    }
+
+    // 平滑捲動
+    document.querySelectorAll('a[href^=\"#\"]').forEach(a=>{
+      a.addEventListener('click', ev=>{
+        const id = a.getAttribute('href');
+        if(id.length > 1){ ev.preventDefault(); document.querySelector(id).scrollIntoView({behavior:'smooth'}); }
+      });
+    });
+  </script>
+</body>
+</html>
